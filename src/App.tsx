@@ -11,10 +11,16 @@ const columns = [
     sortable: true,
   },
   {
+    name: 'Name',
+    selector: 'authorMeta.name',
+    sortable: true,
+  },
+  {
     name: 'Text',
     selector: 'text',
     sortable: true,
   },
+
 ];
 
 function App() {
