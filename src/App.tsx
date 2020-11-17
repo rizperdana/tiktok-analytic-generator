@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import data from './data/trend.json';
+import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
 
 const nFormatter = (num, digits) => {
@@ -36,10 +37,8 @@ const columns = [
     name: 'Create at',
     selector: 'createTime',
     sortable: true,
-    cell: row =>
-    <div>
-      {row.createTime}
-    </div>
+    maxWidth: '4em',
+    cell: row => <Moment unix format="DD/MM/YY - HH:mm:ss">{row.createTime}</Moment>
   },
   {
     name: 'Play',
@@ -89,6 +88,8 @@ const columns = [
     name: 'Caption',
     selector: 'text',
     sortable: true,
+    wrap: true,
+    cell: row => <div className="Text-left">{row.text}</div>
   },
   //Hashtag and mention name gonna be added on additional drowpdown column
 ];
@@ -100,7 +101,6 @@ function App() {
         Welcome to Tiktok Analytics
       </header>
       <DataTable
-        title="1000 Tiktok Trend For Today"
         columns={columns}
         data={data}
         keyField='id'
