@@ -15,7 +15,7 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 20vh;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,22 +35,4 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.Avatar {
-  border-radius: 50%;
-  width: 3em;
-}
-
-.Text-left {
-  text-align: left;
-}
-
-.Text-left a {
-  text-decoration: none;
-}
-
-.tiktok-embed {
-  max-width: 605px;
-  min-width: 325px;
 }
