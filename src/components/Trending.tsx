@@ -3,10 +3,12 @@ import './Trending.css';
 import data from '../data/trend.json';
 import Moment from 'react-moment';
 import DataTable from 'react-data-table-component';
+import DetectHashtag from './DetectHashtag';
 
 const Trending = () => {
 
 	const nFormatter = (num, digits) => {
+	//convert number notation into K, M, G, etc
 		var si = [
 			{ value: 1, symbol: "" },
 			{ value: 1E3, symbol: " k" },
@@ -73,7 +75,7 @@ const Trending = () => {
 			{
 				name: 'Avatar',
 				grow: 0,
-				cell: row => <img className="Avatar" alt={row.authorMeta.name} src={row.authorMeta.avatar} />,
+				cell: row => <img className="Avatar" alt={row.authorMeta.name} /*src={row.authorMeta.avatar}*/ />,
 			},
 			{
 				name: 'Name',
@@ -82,8 +84,7 @@ const Trending = () => {
 				maxWidth: '16em',
 				cell: row =>
 					<div className="Text-left">
-						<div>Username: <a href={'https://www.tiktok.com/@'+row.authorMeta.name} target="_blank" rel="noreferrer noopener">{'@'+row.authorMeta.name}</a></div>
-						<div>Name: <strong>{row.authorMeta.nickName}</strong> { row.authorMeta.verified ? '🔵' : '' }</div>
+						<div><a href={'https://www.tiktok.com/@'+row.authorMeta.name} target="_blank" rel="noreferrer noopener">{'@'+row.authorMeta.name}</a><strong> {row.authorMeta.nickName}</strong> { row.authorMeta.verified ? '🔵' : '' }</div>
 					</div>
 			},
 			{
@@ -91,9 +92,24 @@ const Trending = () => {
 				selector: 'text',
 				sortable: true,
 				wrap: true,
-				cell: row => <div className="Text-left">{row.text}</div>
+				cell: row => <div className="Text-left" dangerouslySetInnerHTML={{ __html: DetectHashtag(row.text) }}></div>
 			},
-			//Hashtag and mention name gonna be added on additional drowpdown column
+		/*{ //this is working, just need to DetectHashtag(row.text)e the source data is not empty
+				name: 'Hashtag',
+				wrap: true,
+				cell: row =>
+					<div>
+						{row.hashtags.map((tag, i) => <li key={i}>{tag.hashtags}</li>)}
+					</div>
+			},*/
+			{
+				name: 'Music',
+				selector: 'musicMeta.musicName',
+				sortable: true,
+				wrap: true,
+				cell: row => <a href={row.musicMeta.playUrl} rel="noreferrer noopener" className="Text-left">{row.musicMeta.musicName} - {row.musicMeta.musicAuthor}</a>
+			},
+
 	];
 
 	return(

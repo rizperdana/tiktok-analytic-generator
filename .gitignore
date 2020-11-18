@@ -47,3 +47,4 @@ yarn-error.log*
 
 /data
 trend.json
+.vscode/launch.json
