@@ -1,40 +1,29 @@
-import React from 'react';
-import './Trending.css';
-import data from '../data/trend.json';
-import Moment from 'react-moment';
-import DataTable from 'react-data-table-component';
-import DetectHashtag from './DetectHashtag';
+import React from 'react'
+import Moment from 'react-moment'
+import DataTable from 'react-data-table-component'
+
+import './Trending.css'
+import data from '../data/trend.json'
+
+import DetectHashtag from './DetectHashtag'
+import NumberFormatter from './NumberFormatter'
+import ExpandedComponent from './ExpandedComponent'
+
 
 const Trending = () => {
-
-	const nFormatter = (num, digits) => {
-	//convert number notation into K, M, G, etc
-		var si = [
-			{ value: 1, symbol: "" },
-			{ value: 1E3, symbol: " k" },
-			{ value: 1E6, symbol: " M" },
-			{ value: 1E9, symbol: " G" },
-			{ value: 1E12, symbol: " T" },
-			{ value: 1E15, symbol: " P" },
-			{ value: 1E18, symbol: " E" }
-		];
-		var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-		var i;
-		for (i = si.length - 1; i > 0; i--) {
-			if (num >= si[i].value) {
-				break;
-			}
-		}
-		return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
-	}
 
 	const columns = [
 			{
 				name: 'Content', //if content then we show cover of the video and when user click there will be dropdown to show the video
 				maxWidth: '1vw',
+				selector: 'videoMeta.duration',
+				sortable: true,
 				cell: row =>
 					<div>
-						<a href={row.webVideoUrl} rel="noreferrer noopener" target="_blank">Video</a>
+						<a href={row.webVideoUrl} rel="noreferrer noopener" target="_blank" className="Text-left">Video</a>
+						<div>
+							<span className="duration">{row.videoMeta.duration}</span><strong> s</strong>
+						</div>
 					</div>
 			},
 			{
@@ -49,33 +38,33 @@ const Trending = () => {
 				sortable: true,
 				selector: 'playCount',
 				maxWidth: '2em',
-				cell: row => <span>{nFormatter(row.playCount, 1)} </span>
+				cell: row => <span>{NumberFormatter(row.playCount, 1)} </span>
 			},
 			{
 				name: 'Likes',
 				sortable: true,
 				selector: 'diggCount',
 				maxWidth: '2em',
-				cell: row => <span>{nFormatter(row.diggCount, 1)}</span>
+				cell: row => <span>{NumberFormatter(row.diggCount, 1)}</span>
 			},
 			{
 				name: 'Comments',
 				sortable: true,
 				selector: 'commentCount',
 				maxWidth: '2em',
-				cell: row => <span>{nFormatter(row.commentCount, 1)}</span>
+				cell: row => <span>{NumberFormatter(row.commentCount, 1)}</span>
 			},
 			{
 				name: 'Share',
 				sortable: true,
 				selector: 'shareCount',
 				maxWidth: '2em',
-				cell: row => <span>{nFormatter(row.shareCount, 1)}</span>
+				cell: row => <span>{NumberFormatter(row.shareCount, 1)}</span>
 			},
 			{
 				name: 'Avatar',
 				grow: 0,
-				cell: row => <img className="Avatar" alt={row.authorMeta.name} /*src={row.authorMeta.avatar}*/ />,
+				cell: row => <img className="Avatar" alt={row.authorMeta.name} src={row.authorMeta.avatar} />,
 			},
 			{
 				name: 'Name',
@@ -110,7 +99,7 @@ const Trending = () => {
 				cell: row => <a href={row.musicMeta.playUrl} rel="noreferrer noopener" className="Text-left">{row.musicMeta.musicName} - {row.musicMeta.musicAuthor}</a>
 			},
 
-	];
+	]
 
 	return(
 		<DataTable
@@ -121,8 +110,11 @@ const Trending = () => {
 			pagination
 			highlightOnHover
 			striped
+			expandableRows
+      expandableRowDisabled={row => row.disabled}
+			expandableRowsComponent={<ExpandedComponent />}
 		/>
 	)
-};
+}
 
 export default Trending;
